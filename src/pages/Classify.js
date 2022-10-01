@@ -13,7 +13,7 @@ import './Classify.css';
 import 'cropperjs/dist/cropper.css';
 
 
-const MODEL_PATH = '/model/model.json';
+const MODEL_PATH = './model/model.json';
 const IMAGE_SIZE = 256;
 const CANVAS_SIZE = 256;
 const TOPK_PREDICTIONS = 5;

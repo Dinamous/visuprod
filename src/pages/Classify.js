@@ -87,6 +87,7 @@ export default class Classify extends Component {
         console.log('Not found in IndexedDB. Loading and saving...');
         console.log(error);
         this.model = await tf.loadLayersModel(MODEL_PATH);
+        console.log(this.model)
         await this.model.save('indexeddb://' + INDEXEDDB_KEY);
       }
     }

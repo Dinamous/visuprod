@@ -13,7 +13,7 @@ import './Classify.css';
 import 'cropperjs/dist/cropper.css';
 
 
-const MODEL_PATH = './model/model.json';
+const MODEL_PATH = '/model/model.json';
 const IMAGE_SIZE = 256;
 const CANVAS_SIZE = 256;
 const TOPK_PREDICTIONS = 5;
@@ -87,7 +87,6 @@ export default class Classify extends Component {
         console.log('Not found in IndexedDB. Loading and saving...');
         console.log(error);
         this.model = await tf.loadLayersModel(MODEL_PATH);
-        console.log(this.model)
         await this.model.save('indexeddb://' + INDEXEDDB_KEY);
       }
     }

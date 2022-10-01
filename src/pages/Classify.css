@@ -53,15 +53,21 @@
   display: flex;
   justify-content: center;
   overflow: hidden;
-  width: 280px;
+  /* width: 280px; */
 }
 
 .Classify #webcam {
-  height: 280px;
+  height: 100%;
+  width: 100%
 }
 
 .Classify .button-container {
   margin-top: 18px;
+}
+
+.Classify .button-container button {
+  width: 100%;
+  padding: 1.5rem .5rem
 }
 
 .Classify .classify-panel-header {

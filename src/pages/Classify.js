@@ -14,8 +14,8 @@ import 'cropperjs/dist/cropper.css';
 
 
 const MODEL_PATH = '/model/model.json';
-const IMAGE_SIZE = 224;
-const CANVAS_SIZE = 224;
+const IMAGE_SIZE = 256;
+const CANVAS_SIZE = 256;
 const TOPK_PREDICTIONS = 5;
 
 const INDEXEDDB_DB = 'tensorflowjs';
@@ -148,10 +148,12 @@ export default class Classify extends Component {
     })
     .then(async (response) => {
       await response.json().then((data) => {
+        console.table(data)
         this.modelLastUpdated = data.last_updated;
       })
       .catch((err) => {
         console.log('Unable to get parse model info.');
+        console.log(err)
       });
     })
     .catch((err) => {
@@ -306,21 +308,25 @@ export default class Classify extends Component {
       { !this.state.modelLoaded &&
         <Fragment>
           <Spinner animation="border" role="status">
-            <span className="sr-only">Loading...</span>
+            <span className="sr-only">Carregando...</span>
           </Spinner>
-          {' '}<span className="loading-model-text">Loading Model</span>
+          {' '}<span className="loading-model-text">Carregando Modelo</span>
         </Fragment>
       }
 
       { this.state.modelLoaded &&
+
+
+
         <Fragment>
+          <p>Para que a aplicação classifique o produto em uma categoria, por gentileza aponte a câmera e pressione o botão "Classificar"</p>
         <Button
           onClick={this.handlePanelClick}
           className="classify-panel-header"
           aria-controls="photo-selection-pane"
           aria-expanded={this.state.photoSettingsOpen}
           >
-          Take or Select a Photo to Classify
+          Tire uma foto para classificar
             <span className='panel-arrow'>
             { this.state.photoSettingsOpen
               ? <FaChevronDown />
@@ -368,16 +374,16 @@ export default class Classify extends Component {
               }
             <Tabs defaultActiveKey="camera" id="input-options" onSelect={this.handleTabSelect}
                   className="justify-content-center">
-              <Tab eventKey="camera" title="Take Photo">
+              <Tab eventKey="camera" title="Câmera">
                 <div id="no-webcam" ref="noWebcam">
                   <span className="camera-icon"><FaCamera /></span>
-                  No camera found. <br />
-                  Please use a device with a camera, or upload an image instead.
+                  Nenhuma câmera encontrada. <br />
+                  Por gentileza, utilize um dispositivo com câmera, ou envie uma foto a partir da galeria.
                 </div>
                 <div className="webcam-box-outer">
                   <div className="webcam-box-inner">
                     <video ref="webcam" autoPlay playsInline muted id="webcam"
-                           width="448" height="448">
+                           width="500" height="1000">
                     </video>
                   </div>
                 </div>
@@ -387,14 +393,14 @@ export default class Classify extends Component {
                     size="lg"
                     onClick={this.classifyWebcamImage}
                     isLoading={this.state.isClassifying}
-                    text="Classify"
-                    loadingText="Classifying..."
+                    text="Classificar"
+                    loadingText="Classificando..."
                   />
                 </div>
               </Tab>
-              <Tab eventKey="localfile" title="Select Local File">
+              <Tab eventKey="localfile" title="Galeria">
                 <Form.Group controlId="file">
-                  <Form.Label>Select Image File</Form.Label><br />
+                  <Form.Label>Selecione um arquivo de imagem</Form.Label><br />
                   <Form.Label className="imagelabel">
                     {this.state.filename ? this.state.filename : 'Browse...'}
                   </Form.Label>
@@ -423,8 +429,8 @@ export default class Classify extends Component {
                         disabled={!this.state.filename}
                         onClick={this.classifyLocalImage}
                         isLoading={this.state.isClassifying}
-                        text="Classify"
-                        loadingText="Classifying..."
+                        text="Classificar"
+                        loadingText="Classificando..."
                       />
                     </div>
                   </Fragment>
@@ -435,7 +441,7 @@ export default class Classify extends Component {
           </Collapse>
           { this.state.predictions.length > 0 &&
             <div className="classification-results">
-              <h3>Predictions</h3>
+              <h3>Este produto aparenta ser {this.state.predictions[0].className}</h3>
               <canvas ref="canvas" width={CANVAS_SIZE} height={CANVAS_SIZE} />
               <br />
               <ListGroup>
